@@ -1,6 +1,4 @@
-// Include C standard libraries for developing modules.
-#include <linux/init.h>
-#include <linux/kernel.h>
+// Include C library for function `printk`; macros `KERN_INFO`, `module_init`, `module_exit`, `MODULE_LICENSE`, `MODULE_DESCRIPTION`, `MODULE_AUTHOR`.
 #include <linux/module.h>
 
 /* This function is called when the module is loaded. */
