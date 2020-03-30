@@ -35,3 +35,13 @@
 *.exe
 *.out
 *.app
+
+# Compiled Kernel Module Files
+*.cmd
+*.symvers
+*.order
+*.ko
+*.mod.c
+
+# [Unignore] Makefile
+!Makefile
