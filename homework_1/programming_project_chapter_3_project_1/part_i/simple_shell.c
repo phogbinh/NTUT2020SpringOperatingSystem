@@ -171,7 +171,6 @@ void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments,
     {
         ExecuteCommand( pCommandArguments );
         // TODO: The developer was unsure whether to free the memories in heap that were dynamically allocated for the system command arguments before calling exit on the child process because he was uncertain whether this memory recycling procedure could be run after `execvp` had overwritten the current program.
-        exit( CODE_ERROR_FREE );
     }
     else if ( kProcessId > 0 )
     {
