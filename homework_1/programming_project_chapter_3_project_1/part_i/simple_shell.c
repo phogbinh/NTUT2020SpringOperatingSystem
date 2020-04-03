@@ -17,7 +17,7 @@ typedef enum
 
 const char AMPERSAND     = '&';
 const char END_OF_STRING = '\0';
-const char* const SPACE        = " ";
+const char* const SPACE = " ";
 
 const char* const COMMAND_EXIT = "exit";
 const int    MAXIMUM_COMMAND_ARGUMENTS_COUNT = 40;
