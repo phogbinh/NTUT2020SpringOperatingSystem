@@ -161,6 +161,7 @@ void ExecuteCommand( char* * const pCommandArguments )
 }
 
 /*  Create a child process and use it to execute the given command.
+    - Creating a child process to execute the system command is necessary as `execvp` will overwrite the current program.
     - This function might modify `pCommandArguments`. The developer was unsure because the argument would be passed into the POSIX API `execvp`. */
 void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments, const bool bIsParentProcessWaitingForChildProcess )
 {
