@@ -259,6 +259,11 @@ void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments,
         {
             wait( NULL );
         }
+        if ( !( strcmp( pCommand, COMMAND_HISTORY ) == 0 || *( pCommand ) == EXCLAMATION_MARK ) )
+        {
+            // The developer assumed that the given command must be a system command in this case.
+            InsertCommandToExecutedCommands( pCommand );
+        }
     }
     else
     {
@@ -282,7 +287,6 @@ void ExecuteCommand( char* * const pCommandArguments, const char* const pCommand
     {
         // The developer assumed that the given command must be a system command in this case.
         CreateChildProcessAndExecuteSystemCommandWithIt( pCommandArguments );
-        InsertCommandToExecutedCommands( pCommand );
     }
 }
 
