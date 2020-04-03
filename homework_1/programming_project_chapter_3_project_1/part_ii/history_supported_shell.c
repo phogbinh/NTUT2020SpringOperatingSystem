@@ -86,7 +86,7 @@ void ReexecuteMostRecentExecutedCommand();
 void ReexecuteExecutedCommandAt( const int nIndex );
 bool IsValidExecutedCommandsIndex( const int nIndex );
 void ReexecuteExecutedCommand( const char* const pExecutedCommand );
-void CreateChildProcessAndExecuteSystemCommandWithIt( char* * const pCommandArguments );
+void ExecuteSystemCommand( char* * const pCommandArguments );
 void InsertCommandToExecutedCommands( const char* const pCommand );
 void FreeCommandArgumentsDynamicallyAllocatedMemoriesInHeap( char* * const pCommandArguments );
 
@@ -244,6 +244,7 @@ void RemoveAmpersandArgumentFromCommandArguments( char* * const pCommandArgument
 }
 
 /*  Create a child process and use it to execute the given command.
+    - Creating a child process to execute the system command is necessary as `execvp` will overwrite the current program.
     - This function might modify `pCommandArguments`. The developer was unsure because the argument might be passed into the POSIX API `execvp`. */
 void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments, const bool bIsParentProcessWaitingForChildProcess, const char* const pCommand )
 {
@@ -258,6 +259,11 @@ void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments,
         if ( bIsParentProcessWaitingForChildProcess )
         {
             wait( NULL );
+        }
+        if ( !( strcmp( pCommand, COMMAND_HISTORY ) == 0 || *( pCommand ) == EXCLAMATION_MARK ) )
+        {
+            // The developer assumed that the given command must be a system command in this case.
+            InsertCommandToExecutedCommands( pCommand );
         }
     }
     else
@@ -281,8 +287,7 @@ void ExecuteCommand( char* * const pCommandArguments, const char* const pCommand
     else
     {
         // The developer assumed that the given command must be a system command in this case.
-        CreateChildProcessAndExecuteSystemCommandWithIt( pCommandArguments );
-        InsertCommandToExecutedCommands( pCommand );
+        ExecuteSystemCommand( pCommandArguments );
     }
 }
 
@@ -353,30 +358,15 @@ void ReexecuteExecutedCommand( const char* const pExecutedCommand )
     ParseAndExecuteCommand( pExecutedCommand );
 }
 
-/*  Create a child process and use it to execute the given system command.
-    - Creating a child process to execute the system command is necessary as `execvp` will overwrite the current program.
+/*  Execute the given system command.
     - This function might modify `pSystemCommandArguments`. The developer was unsure because the argument would be passed into the POSIX API `execvp`. */
-void CreateChildProcessAndExecuteSystemCommandWithIt( char* * const pSystemCommandArguments )
+void ExecuteSystemCommand( char* * const pSystemCommandArguments )
 {
-    pid_t kProcessId = fork();
-    if ( kProcessId == 0 )
+    int nExecuteFileReturnValue = execvp( *( pSystemCommandArguments ), pSystemCommandArguments );
+    if ( nExecuteFileReturnValue == POSIX_ERROR_CODE )
     {
-        int nExecuteFileReturnValue = execvp( *( pSystemCommandArguments ), pSystemCommandArguments );
-        if ( nExecuteFileReturnValue == POSIX_ERROR_CODE )
-        {
-            perror( ERROR_COMMAND_CANNOT_BE_EXECUTED );
-            exit( CODE_ERROR_COMMAND_CANNOT_BE_EXECUTED );
-        }
-        exit( CODE_ERROR_FREE );
-    }
-    else if ( kProcessId > 0 )
-    {
-        wait( NULL );
-    }
-    else
-    {
-        perror( ERROR_FORK_FAILS );
-        exit( CODE_ERROR_FORK_FAILS );
+        perror( ERROR_COMMAND_CANNOT_BE_EXECUTED );
+        exit( CODE_ERROR_COMMAND_CANNOT_BE_EXECUTED );
     }
 }
 
