@@ -22,7 +22,7 @@ typedef enum
 /// Macros
 ///
 #define MAXIMUM_COMMAND_LENGTH 500
-#define MAXIMUM_EXECUTED_COMMANDS_COUNT 1000
+#define MAXIMUM_EXECUTED_SYSTEM_COMMANDS_COUNT 1000
 
 ///
 /// Constants
@@ -32,70 +32,70 @@ const char END_OF_STRING    = '\0';
 const char EXCLAMATION_MARK = '!';
 const char* const SPACE = " ";
 
-const char* const COMMAND_EXIT = "exit";
+const char* const COMMAND_EXIT    = "exit";
 const char* const COMMAND_HISTORY = "history";
-const int HISTORY_COMMAND_EXECUTED_COMMANDS_COUNT = 10;
-const int    MAXIMUM_COMMAND_ARGUMENTS_COUNT = 40;
-const size_t MAXIMUM_COMMAND_ARGUMENT_LENGTH = 10;
+const int HISTORY_COMMAND_EXECUTED_SYSTEM_COMMANDS_COUNT = 10;
+const int    MAXIMUM_SYSTEM_COMMAND_ARGUMENTS_COUNT = 40;
+const size_t MAXIMUM_SYSTEM_COMMAND_ARGUMENT_LENGTH = 10;
 
-const char* const MESSAGE_EXECUTED_COMMANDS_INDEX_IS_INVALID = "No such command in history.";
-const char* const MESSAGE_EXECUTED_COMMANDS_IS_EMPTY         = "No commands in history.";
-const char* const MESSAGE_REEXECUTE_COMMAND                  = "Re-execute command:";
+const char* const MESSAGE_EXECUTED_SYSTEM_COMMANDS_INDEX_IS_OUT_OF_RANGE = "No such command in history.";
+const char* const MESSAGE_EXECUTED_SYSTEM_COMMANDS_IS_EMPTY              = "No commands in history.";
+const char* const MESSAGE_REEXECUTE_SYSTEM_COMMAND                       = "Re-execute system command:";
 
 const int POSIX_ERROR_CODE = -1;
 
 const char* const ERROR_ARRAY_OF_STRINGS_DOES_NOT_END_WITH_NULL = "The given array of strings does not end with NULL";
-const char* const ERROR_ARRAY_OF_STRINGS_IS_EMPTY = "The given array of strings is empty";
-const char* const ERROR_COMMAND_CANNOT_BE_EXECUTED = "The command cannot be executed";
-const char* const ERROR_FORK_FAILS = "Fork fails";
-const char* const ERROR_NULL_POINTER_INDEX_IS_NEGATIVE = "The given null pointer index is negative.";
-const char* const ERROR_STANDARD_INPUT_CANNOT_BE_READ = "The standard input cannot be read";
+const char* const ERROR_ARRAY_OF_STRINGS_IS_EMPTY               = "The given array of strings is empty";
+const char* const ERROR_SYSTEM_COMMAND_CANNOT_BE_EXECUTED       = "The system command cannot be executed";
+const char* const ERROR_FORK_FAILS                              = "Fork fails";
+const char* const ERROR_NULL_POINTER_INDEX_IS_NEGATIVE          = "The given null pointer index is negative.";
+const char* const ERROR_STANDARD_INPUT_CANNOT_BE_READ           = "The standard input cannot be read";
 
-const int CODE_ERROR_FREE = 0;
+const int CODE_ERROR_FREE                                    = 0;
 const int CODE_ERROR_ARRAY_OF_STRINGS_DOES_NOT_END_WITH_NULL = 1;
-const int CODE_ERROR_ARRAY_OF_STRINGS_IS_EMPTY = 2;
-const int CODE_ERROR_COMMAND_CANNOT_BE_EXECUTED = 3;
-const int CODE_ERROR_FORK_FAILS = 4;
-const int CODE_ERROR_NULL_POINTER_INDEX_IS_NEGATIVE = 5;
-const int CODE_ERROR_STANDARD_INPUT_CANNOT_BE_READ = 6;
+const int CODE_ERROR_ARRAY_OF_STRINGS_IS_EMPTY               = 2;
+const int CODE_ERROR_SYSTEM_COMMAND_CANNOT_BE_EXECUTED       = 3;
+const int CODE_ERROR_FORK_FAILS                              = 4;
+const int CODE_ERROR_NULL_POINTER_INDEX_IS_NEGATIVE          = 5;
+const int CODE_ERROR_STANDARD_INPUT_CANNOT_BE_READ           = 6;
 
 ///
 /// Global variables
 ///
-char g_kExecutedCommands[ MAXIMUM_EXECUTED_COMMANDS_COUNT ][ MAXIMUM_COMMAND_LENGTH ];
-int g_nExecutedCommandsCount;
+char g_kExecutedSystemCommands[ MAXIMUM_EXECUTED_SYSTEM_COMMANDS_COUNT ][ MAXIMUM_COMMAND_LENGTH ];
+int g_nExecutedSystemCommandsCount;
 
 ///
 /// Functions' declarations
 ///
 void ExecuteShell( bool* pIsShellRunning );
 void InputCommand( char* const pCommand );
-void ParseAndExecuteCommand( const char* const pCommand );
-void SetCommandArguments( char* * const pCommandArguments, const char* const pCommand );
-void SplitStringIntoTokens( char* const pString, const char* const pDelimiter, char* * const pTokens, size_t kTokenLength );
-void InsertToken( const char* const pString, char* * const pTokens, const int nTokenIndex, size_t kTokenLength );
-bool IsParentProcessWaitingForChildProcess( char* * const pCommandArguments );
-int GetLastIndex( char* * const pArrayOfStrings, const int nArrayMaximumLength );
-int GetNullPointerIndex( char* * const pArrayOfStrings, const int nArrayMaximumLength );
-void RemoveAmpersandArgumentFromCommandArguments( char* * const pCommandArguments );
-void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments, const bool bIsParentProcessWaitingForChildProcess, const char* const pCommand );
-void ExecuteCommand( char* * const pCommandArguments, const char* const pCommand );
+void ExecuteCommand( const char* const pCommand );
 void ExecuteHistoryCommand();
 void ExecuteExclamationMarkCommand( const char* const pExclamationMarkCommand );
-void ReexecuteMostRecentExecutedCommand();
-void ReexecuteExecutedCommandAt( const int nIndex );
-bool IsValidExecutedCommandsIndex( const int nIndex );
-void ReexecuteExecutedCommand( const char* const pExecutedCommand );
-void ExecuteSystemCommand( char* * const pCommandArguments );
-void InsertCommandToExecutedCommands( const char* const pCommand );
-void FreeCommandArgumentsDynamicallyAllocatedMemoriesInHeap( char* * const pCommandArguments );
+void ReexecuteMostRecentExecutedSystemCommand();
+void ReexecuteExecutedSystemCommandAt( const int nIndex );
+bool IsInRangeExecutedSystemCommandsIndex( const int nIndex );
+void ReexecuteExecutedSystemCommand( const char* const pExecutedSystemCommand );
+void InsertSystemCommandToExecutedSystemCommands( const char* const pSystemCommand );
+void ParseAndExecuteSystemCommand( const char* const pSystemCommand );
+void SetSystemCommandArguments( char* * const pSystemCommandArguments, const char* const pSystemCommand );
+void SplitStringIntoTokens( char* const pString, const char* const pDelimiter, char* * const pTokens, size_t kTokenLength );
+void InsertToken( const char* const pString, char* * const pTokens, const int nTokenIndex, size_t kTokenLength );
+bool IsParentProcessWaitingForChildProcess( char* * const pSystemCommandArguments );
+int GetLastIndex( char* * const pArrayOfStrings, const int nArrayMaximumLength );
+int GetNullPointerIndex( char* * const pArrayOfStrings, const int nArrayMaximumLength );
+void RemoveAmpersandArgumentFromSystemCommandArguments( char* * const pSystemCommandArguments );
+void CreateChildProcessAndExecuteSystemCommandWithIt( char* * const pSystemCommandArguments, const bool bIsParentProcessWaitingForChildProcess );
+void ExecuteSystemCommand( char* * const pSystemCommandArguments );
+void FreeSystemCommandArgumentsDynamicallyAllocatedMemoriesInHeap( char* * const pSystemCommandArguments );
 
 ///
 /// Main function
 ///
 int main( int nArgumentsCount, char* kArguments[] )
 {
-    g_nExecutedCommandsCount = 0;
+    g_nExecutedSystemCommandsCount = 0;
     bool bIsShellRunning = true;
     while ( bIsShellRunning )
     {
@@ -117,7 +117,7 @@ void ExecuteShell( bool* pIsShellRunning )
         *pIsShellRunning = false;
         return;
     }
-    ParseAndExecuteCommand( kCommand );
+    ExecuteCommand( kCommand );
 }
 
 /* Input the command from the standard input. */
@@ -135,27 +135,121 @@ void InputCommand( char* const pCommand )
     *( pCommand + kReadBytesCount - 1 ) = END_OF_STRING;
 }
 
-/* Parse and execute the command. */
-void ParseAndExecuteCommand( const char* const pCommand )
+/* Execute the given command. */
+void ExecuteCommand( const char* const pCommand )
 {
-    char* kCommandArguments[ MAXIMUM_COMMAND_ARGUMENTS_COUNT ];
-    SetCommandArguments( kCommandArguments, pCommand );
-    bool bIsParentProcessWaitingForChildProcess = IsParentProcessWaitingForChildProcess( kCommandArguments );
-    if ( !bIsParentProcessWaitingForChildProcess )
+    if ( strcmp( pCommand, COMMAND_HISTORY ) == 0 )
     {
-        RemoveAmpersandArgumentFromCommandArguments( kCommandArguments );
+        ExecuteHistoryCommand();
     }
-    // Although the function `CreateChildProcessAndExecuteCommandWithIt` might modify `kCommandArguments`, the developer did not clone the variable and pass the cloned version as the function argument because this was a tedious task. Instead, the developer chose to document the problem and neglect it to save time.
-    CreateChildProcessAndExecuteCommandWithIt( kCommandArguments, bIsParentProcessWaitingForChildProcess, pCommand );
-    FreeCommandArgumentsDynamicallyAllocatedMemoriesInHeap( kCommandArguments );
+    else if ( *( pCommand ) == EXCLAMATION_MARK )
+    {
+        ExecuteExclamationMarkCommand( pCommand + 1 );
+    }
+    else
+    {
+        // The developer assumed that the given command must be a system command in this case.
+        InsertSystemCommandToExecutedSystemCommands( pCommand );
+        ParseAndExecuteSystemCommand( pCommand );
+    }
 }
 
-/* Set the command arguments according to the given command. */
-void SetCommandArguments( char* * const pCommandArguments, const char* const pCommand )
+/* Execute the history command. */
+void ExecuteHistoryCommand()
 {
-    char kClonedCommand[ MAXIMUM_COMMAND_LENGTH ];
-    strcpy( kClonedCommand, pCommand );
-    SplitStringIntoTokens( kClonedCommand, SPACE, pCommandArguments, MAXIMUM_COMMAND_ARGUMENT_LENGTH );
+    int nIndex = g_nExecutedSystemCommandsCount;
+    while ( true )
+    {
+        if ( g_nExecutedSystemCommandsCount - nIndex + 1 > HISTORY_COMMAND_EXECUTED_SYSTEM_COMMANDS_COUNT )
+        {
+            break;
+        }
+        if ( nIndex < 1 )
+        {
+            break;
+        }
+        printf( "%d %s\n", nIndex, g_kExecutedSystemCommands[ nIndex ] );
+        nIndex--;
+    }
+}
+
+/* Execute the exclamation mark command. */
+void ExecuteExclamationMarkCommand( const char* const pExclamationMarkCommand )
+{
+    if ( *( pExclamationMarkCommand ) == EXCLAMATION_MARK )
+    {
+        ReexecuteMostRecentExecutedSystemCommand();
+    }
+    else
+    {
+        ReexecuteExecutedSystemCommandAt( atoi( pExclamationMarkCommand ) );
+    }
+}
+
+/* Re-execute the most recent executed system command. */
+void ReexecuteMostRecentExecutedSystemCommand()
+{
+    if ( g_nExecutedSystemCommandsCount == 0 )
+    {
+        printf( "%s\n", MESSAGE_EXECUTED_SYSTEM_COMMANDS_IS_EMPTY );
+        return;
+    }
+    ReexecuteExecutedSystemCommand( g_kExecutedSystemCommands[ g_nExecutedSystemCommandsCount ] );
+}
+
+/* Re-execute the executed system command at the given index. */
+void ReexecuteExecutedSystemCommandAt( const int nIndex )
+{
+    if ( !IsInRangeExecutedSystemCommandsIndex( nIndex ) )
+    {
+        printf( "%s\n", MESSAGE_EXECUTED_SYSTEM_COMMANDS_INDEX_IS_OUT_OF_RANGE );
+        return;
+    }
+    ReexecuteExecutedSystemCommand( g_kExecutedSystemCommands[ nIndex ] );
+}
+
+/* Determine whether the given index is an in range executed system commands' index. */
+bool IsInRangeExecutedSystemCommandsIndex( const int nIndex )
+{
+    return 1 <= nIndex && nIndex <= g_nExecutedSystemCommandsCount;
+}
+
+/* Re-execute the given executed system command. */
+void ReexecuteExecutedSystemCommand( const char* const pExecutedSystemCommand )
+{
+    printf( "%s %s\n", MESSAGE_REEXECUTE_SYSTEM_COMMAND, pExecutedSystemCommand );
+    InsertSystemCommandToExecutedSystemCommands( pExecutedSystemCommand );
+    ParseAndExecuteSystemCommand( pExecutedSystemCommand );
+}
+
+/* Insert the given system command to the executed system commands. */
+void InsertSystemCommandToExecutedSystemCommands( const char* const pSystemCommand )
+{
+    g_nExecutedSystemCommandsCount++;
+    strcpy( g_kExecutedSystemCommands[ g_nExecutedSystemCommandsCount ], pSystemCommand );
+}
+
+/* Parse and execute the given system command. */
+void ParseAndExecuteSystemCommand( const char* const pSystemCommand )
+{
+    char* kSystemCommandArguments[ MAXIMUM_SYSTEM_COMMAND_ARGUMENTS_COUNT ];
+    SetSystemCommandArguments( kSystemCommandArguments, pSystemCommand );
+    bool bIsParentProcessWaitingForChildProcess = IsParentProcessWaitingForChildProcess( kSystemCommandArguments );
+    if ( !bIsParentProcessWaitingForChildProcess )
+    {
+        RemoveAmpersandArgumentFromSystemCommandArguments( kSystemCommandArguments );
+    }
+    // Although the function `CreateChildProcessAndExecuteSystemCommandWithIt` might modify `kSystemCommandArguments`, the developer did not clone the variable and pass the cloned version as the function argument because this was a tedious task. Instead, the developer chose to document the problem and neglect it to save time.
+    CreateChildProcessAndExecuteSystemCommandWithIt( kSystemCommandArguments, bIsParentProcessWaitingForChildProcess );
+    FreeSystemCommandArgumentsDynamicallyAllocatedMemoriesInHeap( kSystemCommandArguments );
+}
+
+/* Set the system command arguments according to the given system command. */
+void SetSystemCommandArguments( char* * const pSystemCommandArguments, const char* const pSystemCommand )
+{
+    char kClonedSystemCommand[ MAXIMUM_COMMAND_LENGTH ];
+    strcpy( kClonedSystemCommand, pSystemCommand );
+    SplitStringIntoTokens( kClonedSystemCommand, SPACE, pSystemCommandArguments, MAXIMUM_SYSTEM_COMMAND_ARGUMENT_LENGTH );
 }
 
 /*  Split the given string into tokens by the given delimiter.
@@ -192,10 +286,10 @@ void InsertToken( const char* const pString, char* * const pTokens, const int nT
 }
 
 /*  Determine whether the parent process must waits for the child process finishing execution before continuing its own.
-    - This function does not modify `pCommandArguments`. The developer did not add the `const` modifiers because the compiler would yield warnings were he to add. */
-bool IsParentProcessWaitingForChildProcess( char* * const pCommandArguments )
+    - This function does not modify `pSystemCommandArguments`. The developer did not add the `const` modifiers because the compiler would yield warnings were he to add. */
+bool IsParentProcessWaitingForChildProcess( char* * const pSystemCommandArguments )
 {
-    return *( *( pCommandArguments + GetLastIndex( pCommandArguments, MAXIMUM_COMMAND_ARGUMENTS_COUNT ) ) ) != AMPERSAND;
+    return *( *( pSystemCommandArguments + GetLastIndex( pSystemCommandArguments, MAXIMUM_SYSTEM_COMMAND_ARGUMENTS_COUNT ) ) ) != AMPERSAND;
 }
 
 /*  Get the last index of an array of strings, whose corresponding string precedes the null pointer.
@@ -237,21 +331,22 @@ int GetNullPointerIndex( char* * const pArrayOfStrings, const int nArrayMaximumL
     }
 }
 
-/* Set the last entry of the command arguments to null. */
-void RemoveAmpersandArgumentFromCommandArguments( char* * const pCommandArguments )
+/* Set the last entry of the system command arguments to null. */
+void RemoveAmpersandArgumentFromSystemCommandArguments( char* * const pSystemCommandArguments )
 {
-    *( pCommandArguments + GetLastIndex( pCommandArguments, MAXIMUM_COMMAND_ARGUMENTS_COUNT ) ) = NULL;
+    *( pSystemCommandArguments + GetLastIndex( pSystemCommandArguments, MAXIMUM_SYSTEM_COMMAND_ARGUMENTS_COUNT ) ) = NULL;
 }
 
-/*  Create a child process and use it to execute the given command.
+/*  Create a child process and use it to execute the given system command.
     - Creating a child process to execute the system command is necessary as `execvp` will overwrite the current program.
-    - This function might modify `pCommandArguments`. The developer was unsure because the argument might be passed into the POSIX API `execvp`. */
-void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments, const bool bIsParentProcessWaitingForChildProcess, const char* const pCommand )
+    - This function might modify `pSystemCommandArguments`. The developer was unsure because the argument would be passed into the POSIX API `execvp`. */
+void CreateChildProcessAndExecuteSystemCommandWithIt( char* * const pSystemCommandArguments, const bool bIsParentProcessWaitingForChildProcess )
 {
     pid_t kProcessId = fork();
     if ( kProcessId == 0 )
     {
-        ExecuteCommand( pCommandArguments, pCommand );
+        ExecuteSystemCommand( pSystemCommandArguments );
+        // TODO: The developer was unsure whether to free the memories in heap that were dynamically allocated for the system command arguments before calling exit on the child process because he was uncertain whether this memory recycling procedure could be run after `execvp` had overwritten the current program.
         exit( CODE_ERROR_FREE );
     }
     else if ( kProcessId > 0 )
@@ -259,11 +354,6 @@ void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments,
         if ( bIsParentProcessWaitingForChildProcess )
         {
             wait( NULL );
-        }
-        if ( !( strcmp( pCommand, COMMAND_HISTORY ) == 0 || *( pCommand ) == EXCLAMATION_MARK ) )
-        {
-            // The developer assumed that the given command must be a system command in this case.
-            InsertCommandToExecutedCommands( pCommand );
         }
     }
     else
@@ -273,91 +363,6 @@ void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments,
     }
 }
 
-/* Execute the command. */
-void ExecuteCommand( char* * const pCommandArguments, const char* const pCommand )
-{
-    if ( strcmp( pCommand, COMMAND_HISTORY ) == 0 )
-    {
-        ExecuteHistoryCommand();
-    }
-    else if ( *( pCommand ) == EXCLAMATION_MARK )
-    {
-        ExecuteExclamationMarkCommand( pCommand + 1 );
-    }
-    else
-    {
-        // The developer assumed that the given command must be a system command in this case.
-        ExecuteSystemCommand( pCommandArguments );
-    }
-}
-
-/* Execute the history command. */
-void ExecuteHistoryCommand()
-{
-    int nIndex = g_nExecutedCommandsCount;
-    while ( true )
-    {
-        if ( g_nExecutedCommandsCount - nIndex + 1 > HISTORY_COMMAND_EXECUTED_COMMANDS_COUNT )
-        {
-            break;
-        }
-        if ( nIndex < 1 )
-        {
-            break;
-        }
-        printf( "%d %s\n", nIndex, g_kExecutedCommands[ nIndex ] );
-        nIndex--;
-    }
-}
-
-/* Execute the exclamation mark command. */
-void ExecuteExclamationMarkCommand( const char* const pExclamationMarkCommand )
-{
-    if ( *( pExclamationMarkCommand ) == EXCLAMATION_MARK )
-    {
-        ReexecuteMostRecentExecutedCommand();
-    }
-    else
-    {
-        ReexecuteExecutedCommandAt( atoi( pExclamationMarkCommand ) );
-    }
-}
-
-/* Re-execute the most recent executed command. */
-void ReexecuteMostRecentExecutedCommand()
-{
-    if ( g_nExecutedCommandsCount == 0 )
-    {
-        printf( "%s\n", MESSAGE_EXECUTED_COMMANDS_IS_EMPTY );
-        return;
-    }
-    ReexecuteExecutedCommand( g_kExecutedCommands[ g_nExecutedCommandsCount ] );
-}
-
-/* Re-execute the executed command at the given index. */
-void ReexecuteExecutedCommandAt( const int nIndex )
-{
-    if ( !IsValidExecutedCommandsIndex( nIndex ) )
-    {
-        printf( "%s\n", MESSAGE_EXECUTED_COMMANDS_INDEX_IS_INVALID );
-        return;
-    }
-    ReexecuteExecutedCommand( g_kExecutedCommands[ nIndex ] );
-}
-
-/* Determine whether the given index is a valid executed commands' index. */
-bool IsValidExecutedCommandsIndex( const int nIndex )
-{
-    return 1 <= nIndex && nIndex <= g_nExecutedCommandsCount;
-}
-
-/* Re-execute the given executed command. */
-void ReexecuteExecutedCommand( const char* const pExecutedCommand )
-{
-    printf( "%s %s\n", MESSAGE_REEXECUTE_COMMAND, pExecutedCommand );
-    ParseAndExecuteCommand( pExecutedCommand );
-}
-
 /*  Execute the given system command.
     - This function might modify `pSystemCommandArguments`. The developer was unsure because the argument would be passed into the POSIX API `execvp`. */
 void ExecuteSystemCommand( char* * const pSystemCommandArguments )
@@ -365,28 +370,21 @@ void ExecuteSystemCommand( char* * const pSystemCommandArguments )
     int nExecuteFileReturnValue = execvp( *( pSystemCommandArguments ), pSystemCommandArguments );
     if ( nExecuteFileReturnValue == POSIX_ERROR_CODE )
     {
-        perror( ERROR_COMMAND_CANNOT_BE_EXECUTED );
-        exit( CODE_ERROR_COMMAND_CANNOT_BE_EXECUTED );
+        perror( ERROR_SYSTEM_COMMAND_CANNOT_BE_EXECUTED );
+        exit( CODE_ERROR_SYSTEM_COMMAND_CANNOT_BE_EXECUTED );
     }
 }
 
-/* Insert the given command to the executed commands. */
-void InsertCommandToExecutedCommands( const char* const pCommand )
-{
-    g_nExecutedCommandsCount++;
-    strcpy( g_kExecutedCommands[ g_nExecutedCommandsCount ], pCommand );
-}
-
-/* Free the memories in heap that were dynamically allocated for the command arguments. */
-void FreeCommandArgumentsDynamicallyAllocatedMemoriesInHeap( char* * const pCommandArguments )
+/* Free the memories in heap that were dynamically allocated for the system command arguments. */
+void FreeSystemCommandArgumentsDynamicallyAllocatedMemoriesInHeap( char* * const pSystemCommandArguments )
 {
     int nIndex;
-    for ( nIndex = 0; nIndex < MAXIMUM_COMMAND_ARGUMENTS_COUNT; nIndex++ )
+    for ( nIndex = 0; nIndex < MAXIMUM_SYSTEM_COMMAND_ARGUMENTS_COUNT; nIndex++ )
     {
-        if ( *( pCommandArguments + nIndex ) == NULL )
+        if ( *( pSystemCommandArguments + nIndex ) == NULL )
         {
             break;
         }
-        free( *( pCommandArguments + nIndex ) );
+        free( *( pSystemCommandArguments + nIndex ) );
     }
 }
