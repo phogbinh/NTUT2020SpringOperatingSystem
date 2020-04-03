@@ -239,7 +239,6 @@ void ParseAndExecuteSystemCommand( const char* const pSystemCommand )
     {
         RemoveAmpersandArgumentFromSystemCommandArguments( kSystemCommandArguments );
     }
-    // Although the function `CreateChildProcessAndExecuteSystemCommandWithIt` might modify `kSystemCommandArguments`, the developer did not clone the variable and pass the cloned version as the function argument because this was a tedious task. Instead, the developer chose to document the problem and neglect it to save time.
     CreateChildProcessAndExecuteSystemCommandWithIt( kSystemCommandArguments, bIsParentProcessWaitingForChildProcess );
     FreeSystemCommandArgumentsDynamicallyAllocatedMemoriesInHeap( kSystemCommandArguments );
 }
@@ -339,15 +338,15 @@ void RemoveAmpersandArgumentFromSystemCommandArguments( char* * const pSystemCom
 
 /*  Create a child process and use it to execute the given system command.
     - Creating a child process to execute the system command is necessary as `execvp` will overwrite the current program.
-    - This function might modify `pSystemCommandArguments`. The developer was unsure because the argument would be passed into the POSIX API `execvp`. */
+    - This function does not modify `pSystemCommandArguments` in the parent process.
+    - This function might modify `pSystemCommandArguments` in the child process. The developer was unsure because the argument would be passed into the POSIX API `execvp`. */
 void CreateChildProcessAndExecuteSystemCommandWithIt( char* * const pSystemCommandArguments, const bool bIsParentProcessWaitingForChildProcess )
 {
     pid_t kProcessId = fork();
     if ( kProcessId == 0 )
     {
+        // `ExecuteSystemCommand` calls `execvp`, replacing the current process image with a new one, effectively overwriting any data of the current process image (including the process's dynamically allocated memories in heap). Thus, no recycling work for the system command arguments needs to be done here.
         ExecuteSystemCommand( pSystemCommandArguments );
-        // TODO: The developer was unsure whether to free the memories in heap that were dynamically allocated for the system command arguments before calling exit on the child process because he was uncertain whether this memory recycling procedure could be run after `execvp` had overwritten the current program.
-        exit( CODE_ERROR_FREE );
     }
     else if ( kProcessId > 0 )
     {

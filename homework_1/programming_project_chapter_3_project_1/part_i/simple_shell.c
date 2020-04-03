@@ -163,15 +163,15 @@ void ExecuteCommand( char* * const pCommandArguments )
 
 /*  Create a child process and use it to execute the given command.
     - Creating a child process to execute the system command is necessary as `execvp` will overwrite the current program.
-    - This function might modify `pCommandArguments`. The developer was unsure because the argument would be passed into the POSIX API `execvp`. */
+    - This function does not modify `pCommandArguments` in the parent process.
+    - This function might modify `pCommandArguments` in the child process. The developer was unsure because the argument would be passed into the POSIX API `execvp`. */
 void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments, const bool bIsParentProcessWaitingForChildProcess )
 {
     pid_t kProcessId = fork();
     if ( kProcessId == 0 )
     {
+        // `ExecuteCommand` calls `execvp`, replacing the current process image with a new one, effectively overwriting any data of the current process image (including the process's dynamically allocated memories in heap). Thus, no recycling work for the command arguments needs to be done here.
         ExecuteCommand( pCommandArguments );
-        // TODO: The developer was unsure whether to free the memories in heap that were dynamically allocated for the system command arguments before calling exit on the child process because he was uncertain whether this memory recycling procedure could be run after `execvp` had overwritten the current program.
-        exit( CODE_ERROR_FREE );
     }
     else if ( kProcessId > 0 )
     {
@@ -211,7 +211,6 @@ void ParseAndExecuteCommand( const char* const pCommand )
     {
         RemoveAmpersandArgumentFromCommandArguments( kCommandArguments );
     }
-    // Although the function `CreateChildProcessAndExecuteCommandWithIt` might modify `kCommandArguments`, the developer did not clone the variable and pass the cloned version as the function argument because this was a tedious task. Instead, the developer chose to document the problem and neglect it to save time.
     CreateChildProcessAndExecuteCommandWithIt( kCommandArguments, bIsParentProcessWaitingForChildProcess );
     FreeCommandArgumentsDynamicallyAllocatedMemoriesInHeap( kCommandArguments );
 }
