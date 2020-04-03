@@ -33,6 +33,7 @@ const char* const ERROR_FORK_FAILS = "Fork fails";
 const char* const ERROR_NULL_POINTER_INDEX_IS_NEGATIVE = "The given null pointer index is negative.";
 const char* const ERROR_STANDARD_INPUT_CANNOT_BE_READ = "The standard input cannot be read";
 
+const int CODE_ERROR_FREE = 0;
 const int CODE_ERROR_ARRAY_OF_STRINGS_DOES_NOT_END_WITH_NULL = 1;
 const int CODE_ERROR_ARRAY_OF_STRINGS_IS_EMPTY = 2;
 const int CODE_ERROR_COMMAND_CANNOT_BE_EXECUTED = 3;
@@ -169,6 +170,7 @@ void CreateChildProcessAndExecuteCommandWithIt( char* * const pCommandArguments,
     if ( kProcessId == 0 )
     {
         ExecuteCommand( pCommandArguments );
+        exit( CODE_ERROR_FREE );
     }
     else if ( kProcessId > 0 )
     {
