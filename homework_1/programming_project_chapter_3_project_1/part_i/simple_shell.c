@@ -30,7 +30,7 @@ const char* const ERROR_ARRAY_OF_STRINGS_DOES_NOT_END_WITH_NULL = "The given arr
 const char* const ERROR_ARRAY_OF_STRINGS_IS_EMPTY = "The given array of strings is empty";
 const char* const ERROR_COMMAND_CANNOT_BE_EXECUTED = "The command cannot be executed";
 const char* const ERROR_FORK_FAILS = "Fork fails";
-const char* const ERROR_NULL_POINTER_INDEX_IS_NEGATIVE = "The given null pointer index is negative.";
+const char* const ERROR_NULL_POINTER_INDEX_IS_NEGATIVE = "The given null pointer index is negative";
 const char* const ERROR_STANDARD_INPUT_CANNOT_BE_READ = "The standard input cannot be read";
 
 const int CODE_ERROR_FREE = 0;
