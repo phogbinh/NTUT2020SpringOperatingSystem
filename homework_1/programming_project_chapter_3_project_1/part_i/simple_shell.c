@@ -27,19 +27,19 @@ const int    MAXIMUM_COMMAND_LENGTH          = 500;
 const int POSIX_ERROR_CODE = -1;
 
 const char* const ERROR_ARRAY_OF_STRINGS_DOES_NOT_END_WITH_NULL = "The given array of strings does not end with NULL";
-const char* const ERROR_ARRAY_OF_STRINGS_IS_EMPTY = "The given array of strings is empty";
-const char* const ERROR_COMMAND_CANNOT_BE_EXECUTED = "The command cannot be executed";
-const char* const ERROR_FORK_FAILS = "Fork fails";
-const char* const ERROR_NULL_POINTER_INDEX_IS_NEGATIVE = "The given null pointer index is negative.";
-const char* const ERROR_STANDARD_INPUT_CANNOT_BE_READ = "The standard input cannot be read";
+const char* const ERROR_ARRAY_OF_STRINGS_IS_EMPTY               = "The given array of strings is empty";
+const char* const ERROR_COMMAND_CANNOT_BE_EXECUTED              = "The command cannot be executed";
+const char* const ERROR_FORK_FAILS                              = "Fork fails";
+const char* const ERROR_NULL_POINTER_INDEX_IS_NEGATIVE          = "The given null pointer index is negative";
+const char* const ERROR_STANDARD_INPUT_CANNOT_BE_READ           = "The standard input cannot be read";
 
-const int CODE_ERROR_FREE = 0;
+const int CODE_ERROR_FREE                                    = 0;
 const int CODE_ERROR_ARRAY_OF_STRINGS_DOES_NOT_END_WITH_NULL = 1;
-const int CODE_ERROR_ARRAY_OF_STRINGS_IS_EMPTY = 2;
-const int CODE_ERROR_COMMAND_CANNOT_BE_EXECUTED = 3;
-const int CODE_ERROR_FORK_FAILS = 4;
-const int CODE_ERROR_NULL_POINTER_INDEX_IS_NEGATIVE = 5;
-const int CODE_ERROR_STANDARD_INPUT_CANNOT_BE_READ = 6;
+const int CODE_ERROR_ARRAY_OF_STRINGS_IS_EMPTY               = 2;
+const int CODE_ERROR_COMMAND_CANNOT_BE_EXECUTED              = 3;
+const int CODE_ERROR_FORK_FAILS                              = 4;
+const int CODE_ERROR_NULL_POINTER_INDEX_IS_NEGATIVE          = 5;
+const int CODE_ERROR_STANDARD_INPUT_CANNOT_BE_READ           = 6;
 
 /* Input the command from the standard input. */
 void InputCommand( char* const pCommand )
@@ -235,5 +235,5 @@ int main( int nArgumentsCount, char* kArguments[] )
     {
         ExecuteShell( &bIsShellRunning );
     }
-    return 0;
+    return CODE_ERROR_FREE;
 }
