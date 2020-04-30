@@ -235,5 +235,5 @@ int main( int nArgumentsCount, char* kArguments[] )
     {
         ExecuteShell( &bIsShellRunning );
     }
-    return 0;
+    return CODE_ERROR_FREE;
 }
