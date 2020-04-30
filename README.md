@@ -4,6 +4,7 @@ This is the homework repository for the course *Operating System* opened during 
 
 ## Homework Execution Examples
 * [Homework 1](homework_1/EXECUTION_EXAMPLES.md)
+* [Homework 2](homework_2/EXECUTION_EXAMPLES.md)
 
 ## Contributor
 * [phogbinh](https://github.com/phogbinh)
