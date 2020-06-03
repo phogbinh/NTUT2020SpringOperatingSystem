@@ -63,7 +63,7 @@ int main( int nArgumentsCount, char* kArguments[] )
 ///
 /// Functions' definitions
 ///
-void InputPositiveInteger( int* pInputNumber, const char* const pInputInstruction )
+void InputPositiveInteger( int* const pInputNumber, const char* const pInputInstruction )
 {
     printf( "%s: ", pInputInstruction );
     scanf( "%d", pInputNumber );
