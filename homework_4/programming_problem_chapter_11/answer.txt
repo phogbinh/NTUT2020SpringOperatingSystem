@@ -1,0 +1,13 @@
+(1)
+- The inode value of file1.txt is 921770.
+- The inode value of file2.txt is 921770.
+- The inode values of the two files are the same.
+- Two files have the same content.
+(2)
+- After file2.txt content modification, the contents of file1.txt and file2.txt are the same.
+- After removing file1.txt, file2.txt still exists.
+- The system call is used for removing file2.txt is execve("/bin/rm", ["rm", "file2.txt"], 0x7ffce4a38df8 /* 53 vars */) = 0
+(3)
+- The inode numbers of file3.txt and file4.txt are different from one another.
+- After file4.txt content modification, the content of file3.txt is also altered.
+- After deleting file3.txt, file4.txt has no one to link to and thus its content cannot be modified.
